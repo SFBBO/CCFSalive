@@ -4,7 +4,7 @@
 
 - Import data from other sources
   - demographic data (such as https://www.bea.gov/resources/for-developers)
-  - manual method start here: https://www.bea.gov/data
+  - manual steps starting here: https://www.bea.gov/data
       - select Data by Place
       - County, Metro, and Other Local Areas
       - GDP by County
@@ -31,6 +31,19 @@
   beaKey <- 37F8C33E-8FE7-4A33-86CC-E5C2065B0E65
   
   - weather data (such as https://power.larc.nasa.gov/data-access-viewer/)
+    - first click Access Data
+    - In box on left select:
+    - 1. Agroclimatology
+    - 2. Daily
+    - 3. lat 37.4364
+    - 3b. long -121.9272
+    - 4. data range 01/01/1981 to 12/31/2019
+    - 5. file format = csv (can select more than one format)
+    - 6. select parameters ( I selected all the Meteorology paramters except wind speed at 50 meters)
+    - 7. Sumbit
+    - after a few seconds you get a download button and get a massive excel file where each row is a day
+    
+        
   - environmental data (such as https://www.epa.gov/enviroatlas/enviroatlas-data)
   
 Place all csv files in "data" folder in repository
