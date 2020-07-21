@@ -36,11 +36,11 @@
     - Agroclimatology
     - Daily
     - lat 37.4364
-    - 3b. long -121.9272
-    - 4. data range 01/01/1981 to 12/31/2019
-    - 5. file format = csv (can select more than one format)
-    - 6. select parameters ( I selected all the Meteorology paramters except wind speed at 50 meters)
-    - 7. Sumbit
+    - long -121.9272
+    - data range 01/01/1981 to 12/31/2019
+    - file format = csv (can select more than one format)
+    - select parameters ( I selected all the Meteorology paramters except wind speed at 50 meters)
+    - Sumbit
     - after a few seconds you get a download button and get a massive excel file where each row is a day
     
         
