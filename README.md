@@ -11,4 +11,4 @@ Our goal for the SESYNC Summer Institute is to produce an interactive web interf
 - Dan Wenny, Landbird Biologist
 - Josh Scullen, Science Director
 
-![San Francisco Bay Bird Observatory](sfbbo logo.jpg?raw=true)
+<img src="sfbbo logo.jpg" height="50%" width="80%" />
