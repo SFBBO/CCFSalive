@@ -33,9 +33,9 @@
   - weather data (such as https://power.larc.nasa.gov/data-access-viewer/)
     - first click Access Data
     - In box on left select:
-    - 1. Agroclimatology
-    - 2. Daily
-    - 3. lat 37.4364
+    - Agroclimatology
+    - Daily
+    - lat 37.4364
     - 3b. long -121.9272
     - 4. data range 01/01/1981 to 12/31/2019
     - 5. file format = csv (can select more than one format)
