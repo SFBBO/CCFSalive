@@ -3,9 +3,10 @@
 
 ## Import data
 - Import data from online CCFS database: set up remote connection with log-in credentials saved in gitignore file (GB)
-- Import data from other sources
-  - Land use data
-  - Climate data
+- Import data from other sources (DW will document process in "external data update steps doc")
+  - demographic data (such as https://www.bea.gov/resources/for-developers)
+  - weather data (such as https://power.larc.nasa.gov/data-access-viewer/)
+  - environmental data (such as https://www.epa.gov/enviroatlas/enviroatlas-data)
   
 ## Wrangle data for visualizations
 
