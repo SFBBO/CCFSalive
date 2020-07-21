@@ -9,3 +9,4 @@ Our goal for the SESYNC Summer Institute is to produce an interactive web interf
 
 Collaborators:  
 Gabbie Burns, Waterbird Biologist
+Max Tarjan, Science Director
