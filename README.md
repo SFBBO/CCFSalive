@@ -7,5 +7,5 @@ In our largest dataset, SFBBO has been documenting bird abundances and vegetatio
 
 Our goal for the SESYNC Summer Institute is to produce an interactive web interface where people can work with visualizations to explore our long-term data in conjunction with social environmental data that are publicly available (e.g., human population growth, land area use). Visitors would be able to engage with dynamic and continuously updated graphs and maps, with some options to filter and search the data. Not only would this interface be a powerful outreach and education tool, but it would also give people a taste of what analyses are possible and inspire new research and partnership ideas.
 
-Collaborators:
+Collaborators:  
 Gabbie Burns, Waterbird Biologist
