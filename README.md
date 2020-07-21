@@ -10,3 +10,5 @@ Our goal for the SESYNC Summer Institute is to produce an interactive web interf
 - Max Tarjan, Science Director
 - Dan Wenny, Landbird Biologist
 - Josh Scullen, Science Director
+
+<img src="sfbbo logo.jpg" height="25%" width="40%" />
