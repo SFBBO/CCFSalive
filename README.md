@@ -1,5 +1,5 @@
 # CCFSalive
-interactive visualization of bird banding data 
+Interactive visualization of bird banding data 
 
 The San Francisco Bay Bird Observatory (SFBBO) is a small non-profit based out of Milpitas, California. We are dedicated to the conservation of birds and their habitats through science and outreach. The San Francisco Bay Area is a particularly interesting area for studying socio-environmental issues because of the tension between the area’s explosive population growth and biological importance. One of SFBBO’s greatest strengths is that we have built extensive datasets about local avian populations that span nearly four decades. Datasets of this size are difficult to find and extremely valuable for studying the long-term impacts of human interactions with the environment.
 
