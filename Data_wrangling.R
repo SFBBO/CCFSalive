@@ -5,6 +5,7 @@
 library(stringr) ##required for string manipulation
 library(DBI)
 library(RPostgres) ##required to connect to online bird banding database
+library(tidyr) ##required for gather
 
 # Extract CCFS data from the banding database ----
 # Read in DB connection details
@@ -21,6 +22,9 @@ con <- dbConnect(RPostgres::Postgres(),
 birds_test <- dbGetQuery(con, statement = paste("SELECT * FROM banding.banding_records LIMIT 10"));
 dbDisconnect(con)
 
+##load bird banding data from access query
+bird.cap<-read.csv("data/AEJ11.csv"); head(bird.cap)
+
 ##load weather data from API
 ##https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=PRECTOT,RH2M,T2M,T2M_MAX,T2M_MIN,PS,WS2M_MIN,WS2M_MAX,WS10M_MAX,WS10M_MIN,WS2M,WS10M&startDate=1981&endDate=2019&userCommunity=AG&tempAverage=INTERANNUAL&outputList=CSV&lat=37.4364&lon=-121.9272
 
@@ -35,4 +39,8 @@ param.names<-data.frame(str_split(param.names, pattern = " MERRA2 1/2x1/2 ", sim
 colnames(param.names)<-c("PARAMETER", "param.descr")
 ##add parameter descriptions to weather data
 weather<-inner_join(weather, data.frame(param.names))
+##tidy weather data
+weather<-weather %>% gather(key = "Month", value = "value", c(JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, ANN))
 write.csv(weather, "data/weather.csv", row.names=F)
+
+##combine weather and bird data for figure 3

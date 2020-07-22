@@ -33,8 +33,8 @@ server <- function(input, output) {
   })
   output[['weather_plot']] <- renderPlot({
     df <- weather %>% 
-      dplyr::filter(param.descr == input[['selected_parameter']])
-    ggplot(df, aes(x = YEAR, y = ANN)) +
+      dplyr::filter(param.descr == input[['selected_parameter']] & Month == "ANN")
+    ggplot(df, aes(x = YEAR, y = value)) +
       geom_line()
   })
 }
