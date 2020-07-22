@@ -6,7 +6,7 @@ library(dplyr)
 
 #runExample('01_hello')
 #Data (can also source the data wrangling code when that's available)
-source('Data_wrangling.R')
+weather<-read.csv("data/weather.csv")
 
 # User Interface
 in1 <- selectInput(

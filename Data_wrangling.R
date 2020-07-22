@@ -35,3 +35,4 @@ param.names<-data.frame(str_split(param.names, pattern = " MERRA2 1/2x1/2 ", sim
 colnames(param.names)<-c("PARAMETER", "param.descr")
 ##add parameter descriptions to weather data
 weather<-inner_join(weather, data.frame(param.names))
+write.csv(weather, "data/weather.csv", row.names=F)
