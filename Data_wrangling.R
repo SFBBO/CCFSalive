@@ -4,14 +4,15 @@
 ##load libraries
 library(stringr) ##required for string manipulation
 library(DBI)
-library(RPostgreSQL)
+library(RPostgres)
 
 # Extract CCFS data from the banding database ----
 # Read in DB connection details
-db_details <- read.csv("database_config.csv")
+db_details <- read.csv("database_config.csv", stringsAsFactors = FALSE)
 
 # Connect to a specific postgres database
-con <- dbConnect(dbDriver("PostgreSQL"),dbname = db_details$Database, 
+con <- dbConnect(RPostgres::Postgres(),
+                 dbname = db_details$Database, 
                  host = db_details$Host,
                  port = db_details$Port,
                  user = db_details$User,
