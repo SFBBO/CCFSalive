@@ -27,3 +27,11 @@ dbDisconnect(con)
 ##load weather data from downloaded csv
 skip<-which(str_detect(string = read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv")[,1], pattern = "END.HEADER"))+1 ##skip all info in header section
 weather<-read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv", skip = skip)
+##get parameter descriptions
+param.start<-which(str_detect(string = read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv")[,1], pattern = "Parameter"))+1 ##find where description of parameters start
+param.names<-as.character(read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv")[param.start:(skip-2),1]) ##get character string of parameter abbreviation and description
+##split abbreviation and parameter description into two character strings
+param.names<-data.frame(str_split(param.names, pattern = " MERRA2 1/2x1/2 ", simplify = T))
+colnames(param.names)<-c("PARAMETER", "param.descr")
+##add parameter descriptions to weather data
+weather<-inner_join(weather, data.frame(param.names))
