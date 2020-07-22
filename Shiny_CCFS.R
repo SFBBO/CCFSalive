@@ -11,18 +11,19 @@ bird.weather<-read.csv("data/bird.weather.csv")
 #bird.weather$Monthyear.date<-as.Date(as.character(bird.weather$Monthyear.date))
 
 # User Interface
-in1 <- selectInput(
-  inputId = 'selected_parameter',
-  label = 'Select a weather parameter',
-  choices = unique(bird.weather$param.descr))
 
-in2 <- selectInput(
+in1 <- selectInput(
   inputId = 'selected_species',
   label = 'Select a bird species',
   choices = unique(bird.weather$Species))
 
-out1 <- textOutput('parameter_label')
-out2 <- textOutput('species_label')
+in2 <- selectInput(
+  inputId = 'selected_parameter',
+  label = 'Select a weather parameter',
+  choices = unique(bird.weather$param.descr))
+
+out1 <- textOutput('species_label')
+out2 <- textOutput('parameter_label')
 out3 <- plotOutput('weather_plot')
 side <- sidebarPanel('Options', in1, in2)
 main <- mainPanel(out1, out2, out3)
@@ -36,19 +37,19 @@ ui <- navbarPage(
 
 # Server
 server <- function(input, output) {
-  output[['parameter_label']] <- renderText({ ##curly bracket indicates that there is an input object that may change based on user inputs
-    input[['select_parameter']]
-  })
   output[['species_label']] <- renderText({
     input[['select_species']]
+  })
+  output[['parameter_label']] <- renderText({ ##curly bracket indicates that there is an input object that may change based on user inputs
+    input[['select_parameter']]
   })
   output[['weather_plot']] <- renderPlot({
     df <- bird.weather %>% 
       dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
     scaleFactor <- max(df$value) / max(df$Rate)
     ggplot(df, aes(x = YEAR, y = value)) +
-      geom_line() +
-      geom_line(aes(x = YEAR, y = Rate * scaleFactor), color="blue") +
+      geom_line(size=1.5) +
+      geom_line(aes(x = YEAR, y = Rate * scaleFactor), color="blue", size=1.5) +
       scale_y_continuous(name=input[['selected_parameter']], sec.axis = sec_axis(~ . /scaleFactor, name = "Birds captured/1000 net hours")) +
       theme(axis.line.y.right = element_line(color = "blue"), 
             axis.ticks.y.right = element_line(color = "blue"),
