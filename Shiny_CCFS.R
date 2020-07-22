@@ -6,20 +6,23 @@ library(dplyr)
 
 #runExample('01_hello')
 #Data (can also source the data wrangling code when that's available)
-skip<-which(str_detect(string = read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv")[,1], pattern = "END.HEADER"))+1 ##skip all info in header section
-weather<-read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv", skip = skip)
+bird.weather<-read.csv("data/bird.weather.csv")
+##format date
+bird.weather$Monthyear.date<-as.Date(as.character(bird.weather$Monthyear.date))
 
 # User Interface
 in1 <- selectInput(
   inputId = 'selected_parameter',
   label = 'Select a weather parameter',
-  choices = unique(weather$PARAMETER))
+  choices = unique(bird.weather$param.descr))
 
 out1 <- textOutput('parameter_label')
 out2 <- plotOutput('weather_plot')
+side <- sidebarPanel('Options', in1)
+main <- mainPanel(out1, out2)
 tab1 <- tabPanel(
   title = 'CCFS Local Weather',
-  in1, out1, out2)
+  sidebarLayout(side, main))
 
 ui <- navbarPage(
   title = 'CCFS Alive',
@@ -31,10 +34,12 @@ server <- function(input, output) {
     input[['select_parameter']]
   })
   output[['weather_plot']] <- renderPlot({
-    df <- weather %>% 
-      dplyr::filter(PARAMETER == input[['selected_parameter']])
-    ggplot(df, aes(x = YEAR, y = ANN)) +
-      geom_line()
+    df <- bird.weather %>% 
+      dplyr::filter(param.descr == input[['selected_parameter']] & YEAR==2005 & Species == "BUSH")
+    ggplot(df, aes(x = Monthyear.date, y = value)) +
+      geom_point() +
+      geom_point(aes(x = Monthyear.date, y = Rate), pch=2) +
+      scale_x_date(date_labels="%B %Y")
   })
 }
 
