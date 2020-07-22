@@ -6,13 +6,15 @@ library(dplyr)
 
 #runExample('01_hello')
 #Data (can also source the data wrangling code when that's available)
-weather<-read.csv("data/weather.csv")
+bird.weather<-read.csv("data/bird.weather.csv")
+##format date
+bird.weather$Monthyear.date<-as.Date(as.character(bird.weather$Monthyear.date))
 
 # User Interface
 in1 <- selectInput(
   inputId = 'selected_parameter',
   label = 'Select a weather parameter',
-  choices = unique(weather$param.descr))
+  choices = unique(bird.weather$param.descr))
 
 out1 <- textOutput('parameter_label')
 out2 <- plotOutput('weather_plot')
@@ -32,10 +34,12 @@ server <- function(input, output) {
     input[['select_parameter']]
   })
   output[['weather_plot']] <- renderPlot({
-    df <- weather %>% 
-      dplyr::filter(param.descr == input[['selected_parameter']] & Month == "ANN")
-    ggplot(df, aes(x = YEAR, y = value)) +
-      geom_line()
+    df <- bird.weather %>% 
+      dplyr::filter(param.descr == input[['selected_parameter']] & YEAR==2005 & Species == "BUSH")
+    ggplot(df, aes(x = Monthyear.date, y = value)) +
+      geom_point() +
+      geom_point(aes(x = Monthyear.date, y = Rate), pch=2) +
+      scale_x_date(date_labels="%B %Y")
   })
 }
 
