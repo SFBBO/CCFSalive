@@ -21,4 +21,5 @@ qplot(Month, COYE, data = month) +
   geom_bar(stat = "identity", fill = "white", color = "black") +
   labs(x = "Month", y = "Avg capture rate")
 
+test <- month.abb
 

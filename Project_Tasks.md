@@ -5,7 +5,7 @@
 - Import data from online CCFS database: set up remote connection with log-in credentials saved in gitignore file (GB)
 - Import data from other sources (DW will document process in "external data update steps doc" and add csv files to "data" folder)
   - demographic data (such as https://www.bea.gov/resources/for-developers)
-  - weather data (such as https://power.larc.nasa.gov/data-access-viewer/)
+  - weather data (such as https://power.larc.nasa.gov/data-access-viewer/) (MT got query info for automating download in the data wrangling doc)
   - environmental data (such as https://www.epa.gov/enviroatlas/enviroatlas-data)
   
 ## Wrangle data for visualizations
