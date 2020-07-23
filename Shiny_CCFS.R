@@ -5,21 +5,38 @@ library(ggplot2)
 library(dplyr)
 
 #runExample('01_hello')
-#Data (can also source the data wrangling code when that's available)
-skip<-which(str_detect(string = read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv")[,1], pattern = "END.HEADER"))+1 ##skip all info in header section
-weather<-read.csv("data/POWER_SinglePoint_Interannual_198101_201912_037d44N_121d93W_ae85921f.csv", skip = skip)
+bird.cap<-read.csv("data/bird.cap.csv")
+bird.weather<-read.csv("data/bird.weather.csv")
+##format date
+bird.cap$Monthyear.date<-as.Date(as.character(bird.cap$Monthyear.date))
 
 # User Interface
-in1 <- selectInput(
+
+#in1 <- selectInput(
+#  inputId = 'selected_species',
+#  label = 'Select bird species',
+#  choices = unique(bird.weather$Species))
+
+in1 <- checkboxGroupInput(
+  inputId = 'selected_species', 
+  label = 'Select bird species', 
+  choices = unique(bird.cap$Species), 
+  selected = "BUSH")
+
+in2 <- selectInput(
   inputId = 'selected_parameter',
   label = 'Select a weather parameter',
-  choices = unique(weather$PARAMETER))
+  choices = unique(bird.weather$param.descr))
 
-out1 <- textOutput('parameter_label')
-out2 <- plotOutput('weather_plot')
+out1 <- textOutput('species_label')
+out2 <- textOutput('parameter_label')
+out3 <- plotOutput('phenology_plot')
+out4 <- plotOutput('weather_plot')
+side <- sidebarPanel('Options', in1, in2)
+main <- mainPanel(out1, out2, out3, out4)
 tab1 <- tabPanel(
-  title = 'CCFS Local Weather',
-  in1, out1, out2)
+  title = 'CCFS Species Capture Rates and Local Weather',
+  sidebarLayout(side, main))
 
 ui <- navbarPage(
   title = 'CCFS Alive',
@@ -27,14 +44,40 @@ ui <- navbarPage(
 
 # Server
 server <- function(input, output) {
+  output[['species_label']] <- renderText({
+    input[['select_species']]
+  })
+  
   output[['parameter_label']] <- renderText({ ##curly bracket indicates that there is an input object that may change based on user inputs
     input[['select_parameter']]
   })
+  
+  output[['phenology_plot']] <- renderPlot({
+    df <- bird.cap %>% 
+      dplyr::filter(Species %in% input[['selected_species']]) %>%
+      group_by(Species, Month, Month.num) %>%
+      summarise(Rate=sum(Cap)/sum(NH)*1000) %>% data.frame()
+    ggplot(df, aes(x = Month.num, y = Rate, color=as.factor(Species))) +
+      geom_line(size=1.25) +
+      ylab("Birds captured/1000 net hours") +
+      xlab("Month") +
+      labs(color="Species")
+  })
+  
   output[['weather_plot']] <- renderPlot({
-    df <- weather %>% 
-      dplyr::filter(PARAMETER == input[['selected_parameter']])
-    ggplot(df, aes(x = YEAR, y = ANN)) +
-      geom_line()
+    df <- bird.weather %>% 
+      dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
+    scaleFactor <- max(df$value) / max(df$Rate)
+    ggplot(df, aes(x = YEAR, y = value)) +
+      geom_line(size=1.25, linetype="dashed") +
+      geom_line(aes(x = YEAR, y = Rate * scaleFactor, color=as.factor(Species)), size=1.25) +
+      scale_y_continuous(name=input[['selected_parameter']], sec.axis = sec_axis(~ . /scaleFactor, name = "Birds captured/1000 net hours")) +
+      theme(axis.line.y.right = element_line(color = "coral3"), 
+            axis.ticks.y.right = element_line(color = "coral3"),
+            axis.text.y.right = element_text(color = "coral3"), 
+            axis.title.y.right = element_text(color = "coral3")
+      ) +
+      labs(color="Species")
   })
 }
 
