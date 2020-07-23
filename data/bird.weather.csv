@@ -1,4 +1,4 @@
-"Species","YEAR","Rate","PARAMETER","param.descr","value"
+"Species","Year","Rate","PARAMETER","param.descr","value"
 "BEWR",1996,31.2840043525571,"PRECTOT","Precipitation (mm day-1) ",847.76
 "BEWR",1996,31.2840043525571,"RH2M","Relative Humidity at 2 Meters (%) ",68.96
 "BEWR",1996,31.2840043525571,"T2M","Temperature at 2 Meters (C) ",14.56

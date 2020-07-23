@@ -7,7 +7,6 @@ library(DBI)
 library(RPostgres) ##required to connect to online bird banding database
 library(tidyr) ##required for gather
 library(dplyr)
-#library(zoo) ##reqired to deal with month-year date formats
 
 # Extract CCFS data from the banding database ----
 # Read in DB connection details
@@ -28,13 +27,10 @@ dbDisconnect(con)
 bird.cap<-read.csv("data/AEJ11.csv", stringsAsFactors = F); head(bird.cap)
 colnames(bird.cap)<-c("Monthyear", "Species", "Cap", "Month", "NH", "Rate")
 ##extract year
-bird.cap$YEAR<-as.numeric(str_split(bird.cap$Monthyear, pattern = " ", simplify = T)[,2])
+bird.cap$Year<-as.numeric(str_split(bird.cap$Monthyear, pattern = " ", simplify = T)[,2])
 ##summarize to get capture rate by species and year
-bird.cap.yr<-bird.cap %>% group_by(Species, YEAR) %>% summarise(Rate=sum(Cap)/sum(NH)*10000) %>% data.frame()
+bird.cap.yr<-bird.cap %>% group_by(Species, Year) %>% summarise(Rate=sum(Cap)/sum(NH)*10000) %>% data.frame()
 
-##convert monthyear to date object
-#bird.cap$Monthyear.date<-zoo::as.Date(zoo::as.yearmon(bird.cap$Monthyear, "%B %Y"))
-#bird.cap$Month.num<-format(bird.cap$Monthyear.date, "%m")
 write.csv(bird.cap, "data/bird.cap.csv", row.names=F)
 
 ##load weather data from API
@@ -53,13 +49,7 @@ colnames(param.names)<-c("PARAMETER", "param.descr")
 weather<-inner_join(weather, data.frame(param.names))
 ##tidy weather data
 weather<-weather %>% gather(key = "Month", value = "value", c(JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, ANN))
-##add monthyear.date
-#weather$Monthyear.date<-zoo::as.Date(zoo::as.yearmon(str_c(weather$Month, "-", weather$YEAR), "%b-%Y"))
-#write.csv(weather, "data/weather.csv", row.names=F)
-
-##spread by parameter name for annual parameters
-#weather<- weather %>% subset(Month=="ANN", select=-c(LAT, LON, Month, PARAMETER)) %>% spread(key = "param.descr", value = "value")
 
 ##combine weather and bird data for figure 3
-bird.weather<-inner_join(bird.cap.yr, subset(weather, Month=="ANN", select = -c(LAT, LON, Month)))
+bird.weather<-inner_join(bird.cap.yr, subset(weather, Month=="ANN", select = -c(LAT, LON, Month)), by = c("Year"= "YEAR"))
 write.csv(bird.weather, "data/bird.weather.csv", row.names=F)

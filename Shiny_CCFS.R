@@ -9,15 +9,9 @@ library(lubridate) ##required for dealing with dates
 bird.cap<-read.csv("data/bird.cap.csv", stringsAsFactors = F)
 bird.weather<-read.csv("data/bird.weather.csv", stringsAsFactors = F)
 ##format date
-#bird.cap$Monthyear.date<-as.Date(bird.cap$Monthyear.date)
 bird.cap$Month<-as.Date(x = paste(bird.cap$Month, "01, 2020"), format= "%b %d, %Y")
 
 # User Interface
-
-#in1 <- selectInput(
-#  inputId = 'selected_species',
-#  label = 'Select bird species',
-#  choices = unique(bird.weather$Species))
 
 in1 <- checkboxGroupInput(
   inputId = 'selected_species', 
@@ -80,10 +74,9 @@ server <- function(input, output) {
           dplyr::filter(Species %in% input[['selected_species']])
       }
     ##create the plot
-      fig <- ggplot(df, aes(x = YEAR, y = Rate, color=as.factor(Species))) +
+      fig <- ggplot(df, aes(x = Year, y = Rate, color=as.factor(Species))) +
         geom_line(size=1.25) +
         ylab("Birds captured/10,000 net hours") +
-        xlab("Year") +
         theme_classic(base_size=18, base_line_size = 1.25) +
         theme(axis.line.y.left = element_line(color = "coral3"), 
               axis.ticks.y.left = element_line(color = "coral3"),
@@ -97,7 +90,7 @@ server <- function(input, output) {
       
       ##add weather data to the plot if a weather parameter is selected
         if (input[['selected_parameter']] != "None") {
-          fig <- fig + geom_line(aes(x = YEAR, y = value * scaleFactor), size=1.25, color="black", linetype="dashed") +
+          fig <- fig + geom_line(aes(x = Year, y = value * scaleFactor), size=1.25, color="black", linetype="dashed") +
             scale_y_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = sec_axis(~ . /scaleFactor, name = input[['selected_parameter']], breaks = scales::pretty_breaks(n = 10))) +
             theme(axis.text.y.right = element_text(color="black", face="bold"))
         }
