@@ -99,15 +99,28 @@ server <- function(input, output) {
   })
   
   output[['weather_correlation_plot']] <- renderPlot({
-    df <- bird.weather %>% 
-      dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
-    fig <- ggplot(df, aes(x=value, y = Rate))
       if (input[['selected_parameter']] != "None") {
-        fig <- fig + geom_point()
+        df <- bird.weather %>% 
+          dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
+        ggplot(df, aes(x=value, y = Rate, color=as.factor(Species))) +
+          geom_point(size=3) +
+          geom_smooth(method = "lm", se = F, size=1.25) +
+          ylab("Birds captured/10,000 net hours") +
+          xlab(input[['selected_parameter']]) +
+          theme_classic(base_size=18, base_line_size = 1.25) +
+          labs(color="Species") +
+          scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+          scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+          theme(axis.text = element_text(color="black", face="bold"))
       } else {
-        fig <- fig #+ geom_text(position = )
+        df <- bird.weather %>% 
+          dplyr::filter(Species %in% input[['selected_species']])
+        ggplot(df, aes(x=value, y = Rate)) +
+          annotate(geom = "text", x = mean(df$value), y = mean(df$Rate), label="Select a weather parameter to plot \nannual capture rates against weather data at CCFS", size=8) +
+          ylab("Birds captured/10,000 net hours") +
+          xlab("Weather parameter") +
+          theme(axis.ticks.x=element_blank(), axis.ticks.y = element_blank(), axis.text = element_blank())
       }
-    fig
   })
 }
 
