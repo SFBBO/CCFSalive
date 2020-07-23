@@ -78,10 +78,10 @@ server <- function(input, output) {
         geom_line(size=1.25) +
         ylab("Birds captured/10,000 net hours") +
         theme_classic(base_size=18, base_line_size = 1.25) +
-        theme(axis.line.y.left = element_line(color = "coral3"), 
-              axis.ticks.y.left = element_line(color = "coral3"),
-              axis.text.y.left = element_text(color = "coral3", face="bold"), 
-              axis.title.y.left = element_text(color = "coral3"),
+        theme(axis.line.y.left = element_line(color = "black"), 
+              axis.ticks.y.left = element_line(color = "black"),
+              axis.text.y.left = element_text(color = "black", face="bold"), 
+              axis.title.y.left = element_text(color = "black"),
               axis.text.x = element_text(color="black", face="bold")
         ) +
         labs(color="Species") +
