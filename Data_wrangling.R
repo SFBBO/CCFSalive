@@ -26,6 +26,7 @@ dbDisconnect(con)
 
 ##load bird banding data from access query
 bird.cap<-read.csv("data/AEJ11.csv", stringsAsFactors = F); head(bird.cap)
+colnames(bird.cap)<-c("Monthyear", "Species", "Cap", "Month", "NH", "Rate")
 ##extract year
 bird.cap$YEAR<-as.numeric(str_split(bird.cap$Monthyear, pattern = " ", simplify = T)[,2])
 ##summarize to get capture rate by species and year
@@ -33,6 +34,8 @@ bird.cap.yr<-bird.cap %>% group_by(Species, YEAR) %>% summarise(Rate=sum(Cap)/su
 
 ##convert monthyear to date object
 bird.cap$Monthyear.date<-zoo::as.Date(zoo::as.yearmon(bird.cap$Monthyear, "%B %Y"))
+bird.cap$Month.num<-format(bird.cap$Monthyear.date, "%m")
+write.csv(bird.cap, "data/bird.cap.csv", row.names=F)
 
 ##load weather data from API
 ##https://power.larc.nasa.gov/cgi-bin/v1/DataAccess.py?&request=execute&identifier=SinglePoint&parameters=PRECTOT,RH2M,T2M,T2M_MAX,T2M_MIN,PS,WS2M_MIN,WS2M_MAX,WS10M_MAX,WS10M_MIN,WS2M,WS10M&startDate=1981&endDate=2019&userCommunity=AG&tempAverage=INTERANNUAL&outputList=CSV&lat=37.4364&lon=-121.9272
