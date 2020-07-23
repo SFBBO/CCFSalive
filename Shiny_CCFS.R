@@ -3,12 +3,14 @@ library(shiny)
 library(stringr)
 library(ggplot2)
 library(dplyr)
+library(lubridate) ##required for dealing with dates
 
 #runExample('01_hello')
-bird.cap<-read.csv("data/bird.cap.csv")
+bird.cap<-read.csv("data/bird.cap.csv", stringsAsFactors = F)
 bird.weather<-read.csv("data/bird.weather.csv")
 ##format date
-bird.cap$Monthyear.date<-as.Date(as.character(bird.cap$Monthyear.date))
+#bird.cap$Monthyear.date<-as.Date(bird.cap$Monthyear.date)
+bird.cap$Month<-as.Date(x = paste(bird.cap$Month, "01, 2020"), format= "%b %d, %Y")
 
 # User Interface
 
@@ -55,12 +57,12 @@ server <- function(input, output) {
   output[['phenology_plot']] <- renderPlot({
     df <- bird.cap %>% 
       dplyr::filter(Species %in% input[['selected_species']]) %>%
-      group_by(Species, Month, Month.num) %>%
+      group_by(Species, Month) %>%
       summarise(Rate=sum(Cap)/sum(NH)*1000) %>% data.frame()
-    ggplot(df, aes(x = Month.num, y = Rate, color=as.factor(Species))) +
+    ggplot(df, aes(x = Month, y = Rate, color=as.factor(Species))) +
       geom_line(size=1.25) +
       ylab("Birds captured/1000 net hours") +
-      xlab("Month") +
+      scale_x_date(date_labels = "%B", date_breaks="1 month") +
       labs(color="Species")
   })
   

@@ -7,7 +7,7 @@ library(DBI)
 library(RPostgres) ##required to connect to online bird banding database
 library(tidyr) ##required for gather
 library(dplyr)
-library(zoo) ##reqired to deal with month-year date formats
+#library(zoo) ##reqired to deal with month-year date formats
 
 # Extract CCFS data from the banding database ----
 # Read in DB connection details
@@ -33,8 +33,8 @@ bird.cap$YEAR<-as.numeric(str_split(bird.cap$Monthyear, pattern = " ", simplify 
 bird.cap.yr<-bird.cap %>% group_by(Species, YEAR) %>% summarise(Rate=sum(Cap)/sum(NH)*1000) %>% data.frame()
 
 ##convert monthyear to date object
-bird.cap$Monthyear.date<-zoo::as.Date(zoo::as.yearmon(bird.cap$Monthyear, "%B %Y"))
-bird.cap$Month.num<-format(bird.cap$Monthyear.date, "%m")
+#bird.cap$Monthyear.date<-zoo::as.Date(zoo::as.yearmon(bird.cap$Monthyear, "%B %Y"))
+#bird.cap$Month.num<-format(bird.cap$Monthyear.date, "%m")
 write.csv(bird.cap, "data/bird.cap.csv", row.names=F)
 
 ##load weather data from API
