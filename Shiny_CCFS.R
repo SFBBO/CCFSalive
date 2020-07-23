@@ -28,8 +28,9 @@ out1 <- textOutput('species_label')
 out2 <- textOutput('parameter_label')
 out3 <- plotOutput('phenology_plot')
 out4 <- plotOutput('weather_plot')
+out5 <- plotOutput('weather_correlation_plot')
 side <- sidebarPanel('Options', in1, in2)
-main <- mainPanel(out1, out2, out3, out4)
+main <- mainPanel(out1, out2, out3, out4, out5)
 tab1 <- tabPanel(
   title = 'CCFS Species Capture Rates and Local Weather',
   sidebarLayout(side, main))
@@ -95,6 +96,18 @@ server <- function(input, output) {
             theme(axis.text.y.right = element_text(color="black", face="bold"))
         }
       fig
+  })
+  
+  output[['weather_correlation_plot']] <- renderPlot({
+    df <- bird.weather %>% 
+      dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
+    fig <- ggplot(df, aes(x=value, y = Rate))
+      if (input[['selected_parameter']] != "None") {
+        fig <- fig + geom_point()
+      } else {
+        fig <- fig #+ geom_text(position = )
+      }
+    fig
   })
 }
 
