@@ -30,7 +30,7 @@ colnames(bird.cap)<-c("Monthyear", "Species", "Cap", "Month", "NH", "Rate")
 ##extract year
 bird.cap$YEAR<-as.numeric(str_split(bird.cap$Monthyear, pattern = " ", simplify = T)[,2])
 ##summarize to get capture rate by species and year
-bird.cap.yr<-bird.cap %>% group_by(Species, YEAR) %>% summarise(Rate=sum(Cap)/sum(NH)*1000) %>% data.frame()
+bird.cap.yr<-bird.cap %>% group_by(Species, YEAR) %>% summarise(Rate=sum(Cap)/sum(NH)*10000) %>% data.frame()
 
 ##convert monthyear to date object
 #bird.cap$Monthyear.date<-zoo::as.Date(zoo::as.yearmon(bird.cap$Monthyear, "%B %Y"))

@@ -73,7 +73,7 @@ server <- function(input, output) {
     ggplot(df, aes(x = YEAR, y = value)) +
       geom_line(size=1.25, linetype="dashed") +
       geom_line(aes(x = YEAR, y = Rate * scaleFactor, color=as.factor(Species)), size=1.25) +
-      scale_y_continuous(name=input[['selected_parameter']], sec.axis = sec_axis(~ . /scaleFactor, name = "Birds captured/1000 net hours")) +
+      scale_y_continuous(name=input[['selected_parameter']], sec.axis = sec_axis(~ . /scaleFactor, name = "Birds captured/10,000 net hours")) +
       theme(axis.line.y.right = element_line(color = "coral3"), 
             axis.ticks.y.right = element_line(color = "coral3"),
             axis.text.y.right = element_text(color = "coral3"), 
