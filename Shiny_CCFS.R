@@ -63,7 +63,11 @@ server <- function(input, output) {
       geom_line(size=1.25) +
       ylab("Birds captured/1000 net hours") +
       scale_x_date(date_labels = "%B", date_breaks="1 month") +
-      labs(color="Species")
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+      labs(color="Species") +
+      theme_classic(base_size=18, base_line_size = 1.25) +
+      theme(axis.text.x = element_text(angle=45, vjust=1, hjust=1, color="black", face="bold")) +
+      theme(axis.text.y = element_text(color="black", face="bold"))
   })
   
   output[['weather_plot']] <- renderPlot({
@@ -79,17 +83,23 @@ server <- function(input, output) {
       fig <- ggplot(df, aes(x = YEAR, y = Rate, color=as.factor(Species))) +
         geom_line(size=1.25) +
         ylab("Birds captured/10,000 net hours") +
+        xlab("Year") +
+        theme_classic(base_size=18, base_line_size = 1.25) +
         theme(axis.line.y.left = element_line(color = "coral3"), 
               axis.ticks.y.left = element_line(color = "coral3"),
-              axis.text.y.left = element_text(color = "coral3"), 
-              axis.title.y.left = element_text(color = "coral3")
+              axis.text.y.left = element_text(color = "coral3", face="bold"), 
+              axis.title.y.left = element_text(color = "coral3"),
+              axis.text.x = element_text(color="black", face="bold")
         ) +
-        labs(color="Species")
+        labs(color="Species") +
+        scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+        scale_x_continuous(breaks = scales::pretty_breaks(n = 10))
       
       ##add weather data to the plot if a weather parameter is selected
         if (input[['selected_parameter']] != "None") {
           fig <- fig + geom_line(aes(x = YEAR, y = value * scaleFactor), size=1.25, color="black", linetype="dashed") +
-            scale_y_continuous(sec.axis = sec_axis(~ . /scaleFactor, name = input[['selected_parameter']]))
+            scale_y_continuous(breaks = scales::pretty_breaks(n = 10), sec.axis = sec_axis(~ . /scaleFactor, name = input[['selected_parameter']], breaks = scales::pretty_breaks(n = 10))) +
+            theme(axis.text.y.right = element_text(color="black", face="bold"))
         }
       fig
   })
