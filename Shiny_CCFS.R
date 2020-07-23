@@ -7,7 +7,7 @@ library(lubridate) ##required for dealing with dates
 
 #runExample('01_hello')
 bird.cap<-read.csv("data/bird.cap.csv", stringsAsFactors = F)
-bird.weather<-read.csv("data/bird.weather.csv")
+bird.weather<-read.csv("data/bird.weather.csv", stringsAsFactors = F)
 ##format date
 #bird.cap$Monthyear.date<-as.Date(bird.cap$Monthyear.date)
 bird.cap$Month<-as.Date(x = paste(bird.cap$Month, "01, 2020"), format= "%b %d, %Y")
@@ -28,7 +28,7 @@ in1 <- checkboxGroupInput(
 in2 <- selectInput(
   inputId = 'selected_parameter',
   label = 'Select a weather parameter',
-  choices = unique(bird.weather$param.descr))
+  choices = c("None", unique(bird.weather$param.descr)))
 
 out1 <- textOutput('species_label')
 out2 <- textOutput('parameter_label')
@@ -67,19 +67,31 @@ server <- function(input, output) {
   })
   
   output[['weather_plot']] <- renderPlot({
-    df <- bird.weather %>% 
-      dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
-    scaleFactor <- max(df$value) / max(df$Rate)
-    ggplot(df, aes(x = YEAR, y = value)) +
-      geom_line(size=1.25, linetype="dashed") +
-      geom_line(aes(x = YEAR, y = Rate * scaleFactor, color=as.factor(Species)), size=1.25) +
-      scale_y_continuous(name=input[['selected_parameter']], sec.axis = sec_axis(~ . /scaleFactor, name = "Birds captured/10,000 net hours")) +
-      theme(axis.line.y.right = element_line(color = "coral3"), 
-            axis.ticks.y.right = element_line(color = "coral3"),
-            axis.text.y.right = element_text(color = "coral3"), 
-            axis.title.y.right = element_text(color = "coral3")
-      ) +
-      labs(color="Species")
+    ##subset data based on whether or not weather will be included on plot
+    if (input[['selected_parameter']] != "None") {
+      df <- bird.weather %>% 
+        dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
+      scaleFactor <-max(df$Rate)/max(df$value) } else {
+        df <- bird.weather %>% 
+          dplyr::filter(Species %in% input[['selected_species']])
+      }
+    ##create the plot
+      fig <- ggplot(df, aes(x = YEAR, y = Rate, color=as.factor(Species))) +
+        geom_line(size=1.25) +
+        ylab("Birds captured/10,000 net hours") +
+        theme(axis.line.y.left = element_line(color = "coral3"), 
+              axis.ticks.y.left = element_line(color = "coral3"),
+              axis.text.y.left = element_text(color = "coral3"), 
+              axis.title.y.left = element_text(color = "coral3")
+        ) +
+        labs(color="Species")
+      
+      ##add weather data to the plot if a weather parameter is selected
+        if (input[['selected_parameter']] != "None") {
+          fig <- fig + geom_line(aes(x = YEAR, y = value * scaleFactor), size=1.25, color="black", linetype="dashed") +
+            scale_y_continuous(sec.axis = sec_axis(~ . /scaleFactor, name = input[['selected_parameter']]))
+        }
+      fig
   })
 }
 
