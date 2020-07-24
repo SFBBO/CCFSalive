@@ -74,6 +74,7 @@ server <- function(input, output) {
       scale_x_date(date_labels = "%B", date_breaks="1 month") +
       scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
       labs(color="Species") +
+      labs(title="Average Captures Per Month") +
       theme_classic(base_size=18, base_line_size = 1.25) +
       theme(axis.text.x = element_text(angle=45, vjust=1, hjust=1, color="black", face="bold")) +
       theme(axis.text.y = element_text(color="black", face="bold"))
@@ -97,9 +98,10 @@ server <- function(input, output) {
               axis.ticks.y.left = element_line(color = "black"),
               axis.text.y.left = element_text(color = "black", face="bold"), 
               axis.title.y.left = element_text(color = "black"),
-              axis.text.x = element_text(color="black", face="bold")
+              axis.text.x = element_text(angle=45, vjust=1, hjust=1, color="black", face="bold")
         ) +
         labs(color="Species") +
+        labs(title="Captures Per Year") +
         scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
         scale_x_continuous(breaks = scales::pretty_breaks(n = 10))
       
@@ -123,6 +125,7 @@ server <- function(input, output) {
           xlab(input[['selected_parameter']]) +
           theme_classic(base_size=18, base_line_size = 1.25) +
           labs(color="Species") +
+          labs(title="Correlation of Annual Captures and Other Factors") +
           scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
           scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
           theme(axis.text = element_text(color="black", face="bold"))
