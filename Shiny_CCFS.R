@@ -13,6 +13,12 @@ bird.cap$Month<-as.Date(x = paste(bird.cap$Month, "01, 2020"), format= "%b %d, %
 
 # User Interface
 
+sfbbo_intro_text <- p("For more than 35 years, the San Francisco Bay Bird Observatory has conducted bird banding research on passerines at the Coyote Creek Field Station (CCFS) in Milpitas. Bird banding provides valuable information that helps us study bird dispersal, migration, behavior, social structure, life span, survival rate, reproductive success, and population growth. It also allows us to understand seasonal and long term population patterns of migratory, wintering and year-round resident birds; and track individual birds, which is important in factoring survival, migratory turnover rates, and longevity. Additionally, it allows us to examine bird response to the riparian restoration at CCFS.")
+
+app_intro_text <- p("Two important metrics that we look at are the number of birds caught at the banding station (abundance) and how the number of birds changes throughout the year (phenology. We group birds into three categories based on their migration strategy: summer residents, winter residents, and migrants. Our banding data give us a picture of how the bird populations are changing over time, but what it doesn't do is explain why. To further explore the trends over time, we bring in other datasets and look for correlations in the data. The interactive graphs below show abundance and phenology for three species with each migration strategy, along with options to bring in data from other external factors. (For more information about why these factors might influence bird populations, scroll down.)")
+
+educational_text <- h4("**Coming soon - some great educational text about factors that impact phenology and abundance!**")
+
 in1 <- checkboxGroupInput(
   inputId = 'selected_species', 
   label = 'Select bird species', 
@@ -21,7 +27,7 @@ in1 <- checkboxGroupInput(
 
 in2 <- selectInput(
   inputId = 'selected_parameter',
-  label = 'Select a weather parameter',
+  label = 'Compare against',
   choices = c("None", unique(bird.weather$param.descr)))
 
 out1 <- textOutput('species_label')
@@ -30,13 +36,15 @@ out3 <- plotOutput('phenology_plot')
 out4 <- plotOutput('weather_plot')
 side <- sidebarPanel('Options', in1, in2)
 main <- mainPanel(out1, out2, out3, out4)
-tab1 <- tabPanel(
-  title = 'CCFS Species Capture Rates and Local Weather',
-  sidebarLayout(side, main))
+  
 
-ui <- navbarPage(
+ui <- fluidPage(
   title = 'CCFS Alive',
-  tab1)
+  titlePanel("San Francisco Bay Bird Observatory"),
+  sfbbo_intro_text,
+  app_intro_text,
+  sidebarLayout(side, main),
+  educational_text)
 
 # Server
 server <- function(input, output) {
