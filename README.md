@@ -18,6 +18,21 @@ Our goal for the SESYNC Summer Institute is to produce an interactive web interf
 
 <img src="www/sfbbo_logo.jpg" height="25%" width="40%" />
 
+# Files
+- data folder
+  - AEJ11.csv: Data query from CCFS microsoft access database. actively used in data wrangling code
+  - Regional_econ_demog_....: Econ data that are downloaded from external website and actively used in data wrangling code
+  -POWER_SinglePoint_Interannual....: monthly weather data downloaded from external site. actively used in data wrangling code
+  - bird.socioenviron.csv: table of annual bird and socioenviron data. output of running data wrangling code
+  - bird.cap.csv: table of bird captures by month-year. output of running data wrangling code
+  - POWER_SinglePoint_Daily...: daily weather data downloaded from external site. not currently used in any code
+  - Regional_farm_econ...: econ data downloaded from external site. not currently used in any code
+  - RegionalGDP_2001-2018.csv: econ data downloaded from external site. not currently used in any code
+- Data_wrangling.R: code to take in bird and socioenviro data to wrangle data and output simplified csv files for use in shiny app
+- Shiny_CCFS.R: cody for shiny app. relies on files in data folder that are derived through data wrangling code
+- database_config.csv: file shared with contributors only with connection info for online CCFS database. will not update in Github due to presence in .gitignore file. need to request this file from G Burns to be able to connect to online CCFS database.
+- External_data_update_steps.md: description of how to acquire external datasets using the external websites. process should be followed to obtain most recent versions of data periodically. eventually would like to automate this process in data wrangling code
+
 # Project Tasks
 ## Import data
 - Import data from online CCFS database: set up remote connection with log-in credentials saved in gitignore file (GB)
