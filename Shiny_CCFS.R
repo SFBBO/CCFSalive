@@ -41,7 +41,7 @@ out2 <- textOutput('parameter_label')
 out3 <- plotOutput('phenology_plot')
 out4 <- plotOutput('weather_plot')
 out5 <- plotOutput('weather_correlation_plot')
-side <- sidebarPanel(style = "position:fixed; width:inhert;",in1, in2)
+side <- sidebarPanel(in1, in2)
 main <- mainPanel(out1, out2, out3, out4, out5)
 
 
