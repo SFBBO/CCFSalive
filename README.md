@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # CCFSalive
 Interactive visualization of bird banding data 
 
@@ -11,7 +16,7 @@ Our goal for the SESYNC Summer Institute is to produce an interactive web interf
 - Dan Wenny, Landbird Biologist
 - Josh Scullen, Science Director
 
-<img src="sfbbo logo.jpg" height="25%" width="40%" />
+<img src="www/sfbbo_logo.jpg" height="25%" width="40%" />
 
 # Files
 - data folder
@@ -56,3 +61,15 @@ Write code for the following figures:
 1. create graphs in shiny (completed by MT)
 2. draft text for shiny (completed by GB)
 3. create layout for shiny (completed by GB)
+
+# Project Status (7/24/20)
+- Shiny_CCFS.R contains a functioning Shiny app that allows viewers to select one or more bird species and on socio-environmental variable. 
+  - Graphs include average captures per month, total captures per year (optionally graphed with socio-enviro factor), and a correlation between captures per year and the chosen socio-enviro factor.
+  - Page includes some placeholder text above and below the graphs to provide more context/education
+  - Future ideas include having the sidebar scroll with graphs (probably doable, but not while we're using the sidebarpanel layout) and building grouping/filtering tools to make it usable when we expand from 9 species to ~200
+
+- Data_wrangling.R contains code for processing CCFS and external weather+economic data from CSV files (which are in the data folder). There are some stubs for where the wrangling could be connected directly to data sources.
+
+- postgres_import branch in git has WIP code for extracting CCFS data from the banding database
+
+- External_data_update_steps.md outlines process for getting our external data from the respective sources. Goal is to eventually have that process as automated as possible
