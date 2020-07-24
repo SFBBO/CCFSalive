@@ -45,6 +45,8 @@ param.names<-as.character(read.csv("data/POWER_SinglePoint_Interannual_198101_20
 ##split abbreviation and parameter description into two character strings
 param.names<-data.frame(str_split(param.names, pattern = " MERRA2 1/2x1/2 ", simplify = T))
 colnames(param.names)<-c("PARAMETER", "param.descr")
+##remove trailing whitespace from parameter names
+param.names$param.descr<-param.names$param.descr %>% str_trim()
 ##add parameter descriptions to weather data
 weather<-inner_join(weather, data.frame(param.names))
 ##tidy weather data
@@ -58,8 +60,8 @@ econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 22
 ##attempt to select columsn with 4 sequential digits in the name
 #econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 220, 230, 270, 280)) %>% select(contains("\\d{4}"))
 names(econ)
-##remove whitespace from description
-econ$Description <- as.character(econ$Description) %>% str_replace_all(pattern = "[^[:alpha:]]", replacement = " ") %>% str_trim()
+##remove whitespace, numbers, and slashes from description
+econ$Description <- as.character(econ$Description) %>% str_replace_all(pattern = "[^[:alpha:]()']", replacement = " ") %>% str_trim()
 ##remove X from date headers
 colnames(econ)<-c("param.descr", str_sub(colnames(econ)[2:length(colnames(econ))], start=2))
 ##gather values
