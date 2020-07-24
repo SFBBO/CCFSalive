@@ -19,6 +19,15 @@ app_intro_text <- p("Two important metrics that we look at are the number of bir
 
 educational_text <- h4("**Coming soon - some great educational text about factors that impact phenology and abundance!**")
 
+page_heading <-fixedRow(
+  div(
+    column(width = 2, tags$img(src = "sfbbo_logo.jpg", 
+                               height = 144, width = 144)),
+    column(width = 10, br(), h1("San Francisco Bay Bird Observatory")), ))
+
+logo <- img(src = "sfbbo_logo.jpg", height = 144, width = 144)
+heading <- h1("San Francisco Bay Bird Observatory")
+
 in1 <- checkboxGroupInput(
   inputId = 'selected_species', 
   label = 'Select bird species', 
@@ -27,7 +36,7 @@ in1 <- checkboxGroupInput(
 
 in2 <- selectInput(
   inputId = 'selected_parameter',
-  label = 'Compare against',
+  label = 'Compare against another factor',
   choices = c("None", unique(bird.weather$param.descr)))
 
 out1 <- textOutput('species_label')
@@ -41,7 +50,8 @@ main <- mainPanel(out1, out2, out3, out4, out5)
 
 ui <- fluidPage(
   title = 'CCFS Alive',
-  titlePanel("San Francisco Bay Bird Observatory"),
+  page_heading,
+  br(),
   sfbbo_intro_text,
   app_intro_text,
   sidebarLayout(side, main),
