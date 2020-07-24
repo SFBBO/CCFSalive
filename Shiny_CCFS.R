@@ -25,9 +25,6 @@ page_heading <-fixedRow(
                                height = 144, width = 144)),
     column(width = 10, br(), h1("San Francisco Bay Bird Observatory")), ))
 
-logo <- img(src = "sfbbo_logo.jpg", height = 144, width = 144)
-heading <- h1("San Francisco Bay Bird Observatory")
-
 in1 <- checkboxGroupInput(
   inputId = 'selected_species', 
   label = 'Select bird species', 
@@ -44,14 +41,13 @@ out2 <- textOutput('parameter_label')
 out3 <- plotOutput('phenology_plot')
 out4 <- plotOutput('weather_plot')
 out5 <- plotOutput('weather_correlation_plot')
-side <- sidebarPanel('Options', in1, in2)
+side <- sidebarPanel(style = "position:fixed; width:inhert;",in1, in2)
 main <- mainPanel(out1, out2, out3, out4, out5)
 
 
 ui <- fluidPage(
   title = 'CCFS Alive',
   page_heading,
-  br(),
   sfbbo_intro_text,
   app_intro_text,
   sidebarLayout(side, main),
