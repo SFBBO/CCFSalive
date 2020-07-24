@@ -53,3 +53,21 @@ weather<-weather %>% gather(key = "Month", value = "value", c(JAN, FEB, MAR, APR
 ##combine weather and bird data for figure 3
 bird.weather<-inner_join(bird.cap.yr, subset(weather, Month=="ANN", select = -c(LAT, LON, Month)), by = c("Year"= "YEAR"))
 write.csv(bird.weather, "data/bird.weather.csv", row.names=F)
+
+
+##import data and trim off extra top rows
+econ <- read.csv("data/Regional_econ_demog_1969-2018.csv", skip = 4, header = T)
+##select specific rows with the variables and columns with the years we want
+econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 220, 230, 270, 280)) %>% 
+         select(4, 32:53) 
+headers <- econ$Description ##save headers in character vector
+econ1 <- select(econ, 2:23) ##remove column with row names
+econ1 <- as.data.frame(t(econ1)) ##transpose so each row is one year
+names(econ1) <- headers ## add column headers
+write.csv(econ1, "data/econ1.csv", row.names=T)
+
+
+##econ1 <- econ %>% Select(2:23) %>% 
+##                  tibble::rownames_to_column() %>% 
+##                  pivot_longer(-rowname) %>%
+##                  pivot_wider(names_from = rowname, values_from = )
