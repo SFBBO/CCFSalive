@@ -15,9 +15,9 @@ bird.cap$Month<-as.Date(x = paste(bird.cap$Month, "01, 2020"), format= "%b %d, %
 
 sfbbo_intro_text <- p("For more than 35 years, the San Francisco Bay Bird Observatory has conducted bird banding research on passerines at the Coyote Creek Field Station (CCFS) in Milpitas. Bird banding provides valuable information that helps us study bird dispersal, migration, behavior, social structure, life span, survival rate, reproductive success, and population growth. It also allows us to understand seasonal and long term population patterns of migratory, wintering and year-round resident birds; and track individual birds, which is important in factoring survival, migratory turnover rates, and longevity. Additionally, it allows us to examine bird response to the riparian restoration at CCFS.")
 
-app_intro_text <- p("Two important metrics that we look at are the number of birds caught at the banding station (abundance) and how the number of birds changes throughout the year (phenology. We group birds into three categories based on their migration strategy: summer residents, winter residents, and migrants. Our banding data give us a picture of how the bird populations are changing over time, but what it doesn't do is explain why. To further explore the trends over time, we bring in other datasets and look for correlations in the data. The interactive graphs below show abundance and phenology for three species with each migration strategy, along with options to bring in data from other external factors. (For more information about why these factors might influence bird populations, scroll down.)")
+app_intro_text <- p("Two important metrics that we look at are the number of birds caught at the banding station (abundance) and how the number of birds changes throughout the year (phenology. We group birds into three categories based on their migration strategy: summer residents, winter residents, and migrants. Our banding data give us a picture of how the bird populations are changing over time, but what it doesn't do is explain why. To further explore the trends over time, we bring in other datasets and look for correlations in the data. The interactive graphs below show abundance and phenology for three species with each migration strategy, along with options to bring in data from other external socio-environmental conditions (e.g., weather and human population census data). (For more information about why these factors might influence bird populations, scroll down.)")
 
-educational_text <- h4("**Coming soon - some great educational text about factors that impact phenology and abundance!**")
+educational_text <- h4("**Coming soon - some great educational text about socio-environmental factors that impact phenology and abundance!**")
 
 page_heading <-fixedRow(
   div(
@@ -33,7 +33,7 @@ in1 <- checkboxGroupInput(
 
 in2 <- selectInput(
   inputId = 'selected_parameter',
-  label = 'Compare against another factor',
+  label = 'Compare against a socio-environmental condition',
   choices = c("None", unique(bird.weather$param.descr)))
 
 out1 <- textOutput('species_label')
@@ -125,7 +125,7 @@ server <- function(input, output) {
           xlab(input[['selected_parameter']]) +
           theme_classic(base_size=18, base_line_size = 1.25) +
           labs(color="Species") +
-          labs(title="Correlation of Annual Captures and Other Factors") +
+          labs(title=str_c("Correlation of Annual Captures and ", input[['selected_parameter']])) +
           scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
           scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
           theme(axis.text = element_text(color="black", face="bold"))
@@ -133,9 +133,10 @@ server <- function(input, output) {
         df <- bird.weather %>% 
           dplyr::filter(Species %in% input[['selected_species']])
         ggplot(df, aes(x=value, y = Rate)) +
-          annotate(geom = "text", x = mean(df$value), y = mean(df$Rate), label="Select a weather parameter to plot \nannual capture rates against weather data at CCFS", size=8) +
+          annotate(geom = "text", x = mean(df$value), y = mean(df$Rate), label="Select a socio-environmental condition to plot \nannual capture rates against socio-environmental data at CCFS", size=8) +
           ylab("Birds captured/10,000 net hours") +
-          xlab("Weather parameter") +
+          xlab("Socio-environmental condition") +
+          theme_classic(base_size=18, base_line_size = 1.25) +
           theme(axis.ticks.x=element_blank(), axis.ticks.y = element_blank(), axis.text = element_blank())
       }
   })
