@@ -34,9 +34,10 @@ out1 <- textOutput('species_label')
 out2 <- textOutput('parameter_label')
 out3 <- plotOutput('phenology_plot')
 out4 <- plotOutput('weather_plot')
+out5 <- plotOutput('weather_correlation_plot')
 side <- sidebarPanel('Options', in1, in2)
-main <- mainPanel(out1, out2, out3, out4)
-  
+main <- mainPanel(out1, out2, out3, out4, out5)
+
 
 ui <- fluidPage(
   title = 'CCFS Alive',
@@ -103,6 +104,31 @@ server <- function(input, output) {
             theme(axis.text.y.right = element_text(color="black", face="bold"))
         }
       fig
+  })
+  
+  output[['weather_correlation_plot']] <- renderPlot({
+      if (input[['selected_parameter']] != "None") {
+        df <- bird.weather %>% 
+          dplyr::filter(param.descr == input[['selected_parameter']] & Species %in% input[['selected_species']])
+        ggplot(df, aes(x=value, y = Rate, color=as.factor(Species))) +
+          geom_point(size=3) +
+          geom_smooth(method = "lm", se = F, size=1.25) +
+          ylab("Birds captured/10,000 net hours") +
+          xlab(input[['selected_parameter']]) +
+          theme_classic(base_size=18, base_line_size = 1.25) +
+          labs(color="Species") +
+          scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+          scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
+          theme(axis.text = element_text(color="black", face="bold"))
+      } else {
+        df <- bird.weather %>% 
+          dplyr::filter(Species %in% input[['selected_species']])
+        ggplot(df, aes(x=value, y = Rate)) +
+          annotate(geom = "text", x = mean(df$value), y = mean(df$Rate), label="Select a weather parameter to plot \nannual capture rates against weather data at CCFS", size=8) +
+          ylab("Birds captured/10,000 net hours") +
+          xlab("Weather parameter") +
+          theme(axis.ticks.x=element_blank(), axis.ticks.y = element_blank(), axis.text = element_blank())
+      }
   })
 }
 

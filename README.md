@@ -23,21 +23,21 @@ Our goal for the SESYNC Summer Institute is to produce an interactive web interf
   
 ## Wrangle data for visualizations
 - wrangle CCFS data from online database to format in csv files (GB)
-- wrangle weather csv data for plotting fig 3 (MT)
-- wrangle social data (DW)
+- wrangle social data for plotting in capture rate versus external data figures (DW)
+- process spatial data to look at land use changes versus capture rates (MT)
 
 ## Create visualizations
 Write code for the following figures:
 1. Phenology: captures (y) per month (x) by species (group)
-2. Time series with capture rate (y1) and weather (y2) by year (x) by species (group)
-3. Time series with capture rate (y1) and social data (y2) by year (x) by species (group)
-4. Correlation of capture rate and social data (population density) by species (group)
+  a. updates needed: add full species name
+2. Time series with capture rate (y1) and weather/social data (y2) by year (x) by species (group)
+  a. updates needed: add social data and full species name
+3. Correlation of capture rate and social data (population density) by species (group)
+  a. Potential update: add linear model stats to graph
 5. Bonus: Map of net locations and animations of capture locations over time
-6. Bonus: Map of land use change categories with graph panel of bird abundance; can manipulate year to change both figures
-7. side by side land use maps of early and recent year with bar graph of species capture rates in early versus recent year (2001 first usgs land use survey and then every 5 years- 4 surveys in relevant timeframe)
+6. Bonus: Map of land use change categories with graph panel of bird abundance; can manipulate year to change both figures (maybe just side by side early and current years)
 
 ## Create Shinyapp to bring visualizations online
 1. create graphs in shiny
-  a. weather graph - add option to plot no weather data
 2. draft text for shiny
-3. research and decide on layout for shiny (GB)
+3. create layout for shiny (GB)
