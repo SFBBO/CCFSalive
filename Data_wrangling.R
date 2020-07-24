@@ -58,6 +58,8 @@ econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 22
 ##attempt to select columsn with 4 sequential digits in the name
 #econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 220, 230, 270, 280)) %>% select(contains("\\d{4}"))
 names(econ)
+##remove whitespace from description
+econ$Description <- as.character(econ$Description) %>% str_replace_all(pattern = "[^[:alpha:]]", replacement = " ") %>% str_trim()
 ##remove X from date headers
 colnames(econ)<-c("param.descr", str_sub(colnames(econ)[2:length(colnames(econ))], start=2))
 ##gather values
