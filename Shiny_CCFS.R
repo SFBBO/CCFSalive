@@ -7,7 +7,7 @@ library(lubridate) ##required for dealing with dates
 
 #runExample('01_hello')
 bird.cap<-read.csv("data/bird.cap.csv", stringsAsFactors = F)
-bird.weather<-read.csv("data/bird.weather.csv", stringsAsFactors = F)
+bird.weather<-read.csv("data/bird.socioenviro.csv", stringsAsFactors = F)
 ##format date
 bird.cap$Month<-as.Date(x = paste(bird.cap$Month, "01, 2020"), format= "%b %d, %Y")
 

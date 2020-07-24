@@ -49,25 +49,25 @@ colnames(param.names)<-c("PARAMETER", "param.descr")
 weather<-inner_join(weather, data.frame(param.names))
 ##tidy weather data
 weather<-weather %>% gather(key = "Month", value = "value", c(JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, ANN))
+weather.yr<-subset(weather, Month=="ANN", select = -c(LAT, LON, Month))
 
-##combine weather and bird data for figure 3
-bird.weather<-inner_join(bird.cap.yr, subset(weather, Month=="ANN", select = -c(LAT, LON, Month)), by = c("Year"= "YEAR"))
-write.csv(bird.weather, "data/bird.weather.csv", row.names=F)
-
-
-##import data and trim off extra top rows
+##import economic data and trim off extra top rows
 econ <- read.csv("data/Regional_econ_demog_1969-2018.csv", skip = 4, header = T)
 ##select specific rows with the variables and columns with the years we want
-econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 220, 230, 270, 280)) %>% 
-         select(4, 32:53) 
-headers <- econ$Description ##save headers in character vector
-econ1 <- select(econ, 2:23) ##remove column with row names
-econ1 <- as.data.frame(t(econ1)) ##transpose so each row is one year
-names(econ1) <- headers ## add column headers
-write.csv(econ1, "data/econ1.csv", row.names=T)
+econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 220, 230, 270, 280)) %>% select(c("Description", starts_with("X")))
+##attempt to select columsn with 4 sequential digits in the name
+#econ <- econ %>% filter(GeoName=="Santa Clara, CA", LineCode %in% c(100, 110, 220, 230, 270, 280)) %>% select(contains("\\d{4}"))
+names(econ)
+##remove X from date headers
+colnames(econ)<-c("param.descr", str_sub(colnames(econ)[2:length(colnames(econ))], start=2))
+##gather values
+econ <- gather(data = econ, key = "YEAR", value = "value", 2:ncol(econ))
+econ <- data.frame(PARAMETER=NA, subset(econ, select=c("YEAR", "param.descr", "value")))
 
+##combine with weather data
+socioenviro<-rbind(weather.yr, econ)
+socioenviro$YEAR<-as.numeric(socioenviro$YEAR)
 
-##econ1 <- econ %>% Select(2:23) %>% 
-##                  tibble::rownames_to_column() %>% 
-##                  pivot_longer(-rowname) %>%
-##                  pivot_wider(names_from = rowname, values_from = )
+##combine socio-environ and bird data for figure 3
+bird.socioenviro<-inner_join(bird.cap.yr, socioenviro, by = c("Year"= "YEAR"))
+write.csv(bird.socioenviro, "data/bird.socioenviro.csv", row.names=F)
